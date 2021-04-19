@@ -50,8 +50,11 @@ end
 
 Perform cubic spline interpolation of an histogram (can be rebinned first).
 """
-function interpolate(h::Histogram{<:Any,1}; binsize=1)
-    hr = normalize(reshape(h, first(h.edges[1]):binsize:last(h.edges[1])))
+function interpolate(h::Histogram{<:Any,1}; binsize=0.1)
+    # rebin first
+    hr = reshape(h, first(h.edges[1]):binsize:last(h.edges[1]))
+    hr.weights .*= step(h.edges[1])/binsize
+    # interpolate
     itp = interpolate(hr.weights, BSpline(Cubic(Line(OnCell()))))
     return extrapolate(scale(itp, StatsBase.midpoints(hr.edges[1])), 0)
 end
@@ -91,6 +94,8 @@ function read_root_histogram(filename::String, histname::String)
     return reshape(hist, hist_format)
 end
 
+n_ar39_primaries = 299999999998
+
 """
     get_ar39_histogram(channel, fccd_mm, dlf)
 
@@ -100,7 +105,10 @@ function get_ar39_histogram(channel::Int, fccd_mm::Float64, dlf::Float64)
     # convert numeric input to string
     fccd_str = Int(fccd_mm*1e3)
     dlf_str = lpad(string(Int(dlf*1e2)), 3, '0')
-    return read_root_histogram("histos/nplus-fccd$(fccd_str)um-dlf$(dlf_str)/lar/sur_array_1/Ar39/pdf-lar-sur_array_1-Ar39.root", "raw/M1_ch$channel")
+    h = read_root_histogram("histos/nplus-fccd$(fccd_str)um-dlf$(dlf_str)/lar/sur_array_1/Ar39/pdf-lar-sur_array_1-Ar39.root", "raw/M1_ch$channel")
+    h.weights ./= n_ar39_primaries
+    normalize!(h, mode=:density)
+    return h
 end
 
 """
