@@ -52,7 +52,7 @@ namespace gerda {
 
         auto location = std::string(__FILE__);
         location = location.substr(0, location.find_last_of('/'));
-        std::string filename = location + "/lookup/ar39-pdf-ch" + std::to_string(channel) + ".dat";
+        std::string filename = location + "../lookup/ar39-pdf-ch" + std::to_string(channel) + ".dat";
         std::ifstream fstr(filename);
         if (!fstr.is_open()) throw std::runtime_error(filename + " not found");
 
