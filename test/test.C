@@ -1,4 +1,4 @@
-#include "../gerda_ar39_pdf.hpp"
+#include "../include/gerda_ar39_pdf.hpp"
 
 std::vector<int> channels = {
     0, 1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
@@ -18,25 +18,25 @@ void fccd_sweep() {
         for (double fccd = 0.65; fccd <= 2.4; fccd += 0.05) {
 
             auto h = new TH1D(Form("channel %i, fccd = %.2f mm, dlf = %.2f", ch, fccd, dlf),
-                    Form("channel %i, fccd = 0.65:0.05:2.4 mm, dlf = %.2f", ch, dlf), 400, 0, 400);
+                    Form("channel %i, fccd = 0.65:0.025:2.4 mm, dlf = %.2f", ch, dlf), 200, 0, 200);
 
             for (int i = 1; i <= h->GetNbinsX(); ++i) {
                 h->SetBinContent(i, gerda::ar39_pdf(ch, h->GetBinCenter(i), fccd, dlf));
             }
-            h->Draw("c same");
+            h->Draw("l same");
             histos.push_back(h);
         }
         // out grid
         for (double fccd = 0.625; fccd <= 2.4; fccd += 0.05) {
 
             auto h = new TH1D(Form("channel %i, fccd = %.2f mm, dlf = %.2f", ch, fccd, dlf),
-                    Form("channel %i, fccd = 0.65:0.05:2.4 mm, dlf = %.2f", ch, dlf), 400, 0, 400);
+                    Form("channel %i, fccd = 0.65:0.025:2.4 mm, dlf = %.2f", ch, dlf), 200, 0, 200);
 
             for (int i = 1; i <= h->GetNbinsX(); ++i) {
                 h->SetBinContent(i, gerda::ar39_pdf(ch, h->GetBinCenter(i), fccd, dlf));
             }
             h->SetLineColor(kRed);
-            h->Draw("c same");
+            h->Draw("l same");
             histos.push_back(h);
         }
 
@@ -64,25 +64,25 @@ void dlf_sweep() {
         for (double dlf = 0.1; dlf <= 1; dlf += 0.1) {
 
             auto h = new TH1D(Form("channel %i, fccd = %.2f mm, dlf = %.2f", ch, fccd, dlf),
-                    Form("channel %i, fccd = %.2f mm, dlf = 0.1:0.05:1", ch, fccd), 400, 0, 400);
+                    Form("channel %i, fccd = %.2f mm, dlf = 0.1:0.05:1", ch, fccd), 200, 0, 200);
 
             for (int i = 1; i <= h->GetNbinsX(); ++i) {
                 h->SetBinContent(i, gerda::ar39_pdf(ch, h->GetBinCenter(i), fccd, dlf));
             }
-            h->Draw("c same");
+            h->Draw("l same");
             histos.push_back(h);
         }
         // out grid
         for (double dlf = 0.15; dlf <= 1; dlf += 0.1) {
 
             auto h = new TH1D(Form("channel %i, fccd = %.2f mm, dlf = %.2f", ch, fccd, dlf),
-                    Form("channel %i, fccd = %.2f mm, dlf = 0.1:0.05:1", ch, fccd), 400, 0, 400);
+                    Form("channel %i, fccd = %.2f mm, dlf = 0.1:0.05:1", ch, fccd), 200, 0, 200);
 
             for (int i = 1; i <= h->GetNbinsX(); ++i) {
                 h->SetBinContent(i, gerda::ar39_pdf(ch, h->GetBinCenter(i), fccd, dlf));
             }
             h->SetLineColor(kRed);
-            h->Draw("c same");
+            h->Draw("l same");
             histos.push_back(h);
         }
 
