@@ -1,6 +1,8 @@
 *.tar.xz
 /test/plots/fccd
 /test/plots/dlf
+/test/plots/*.pdf
 /lookup
+/histos
 /_aux
 *.auxtex
