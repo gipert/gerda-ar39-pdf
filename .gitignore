@@ -1,7 +1,7 @@
 *.tar.xz
 /test/plots/fccd
 /test/plots/dlf
-/test/plots/*.pdf
+/test/plots/report.pdf
 /lookup
 /histos
 /_aux

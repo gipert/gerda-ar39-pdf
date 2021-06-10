@@ -21,6 +21,8 @@ namespace gerda {
     constexpr range_fmt energy_kev_fmt = {0., 0.1, 565.};
     constexpr range_fmt fccd_mm_fmt = {0.65, 0.05, 2.4};
     constexpr range_fmt dlf_fmt = {0., 0.1, 1.};
+    // plus the allowed channel values
+    constexpr range_fmt channel_fmt = {0, 1, 41};
 
     constexpr size_t n_energy = (energy_kev_fmt.max-energy_kev_fmt.min)/energy_kev_fmt.step+1;
     constexpr size_t n_fccd = (fccd_mm_fmt.max-fccd_mm_fmt.min)/fccd_mm_fmt.step+1;
@@ -47,6 +49,10 @@ namespace gerda {
      * Read Ar39 lookup table for a germanium channel from disk and store it inside `map`
      */
     void load_lookup_table(std::map<int, lookup_table>& table_map, int channel) {
+
+        if (channel < channel_fmt.min or channel > channel_fmt.max) {
+            throw std::domain_error("channel value " + std::to_string(channel) + " is out of the allowed range");
+        }
 
         table_map.emplace(channel, new model_matrix[n_energy]);
 
@@ -89,7 +95,22 @@ namespace gerda {
      * is read from disk. A tri-linear interpolation is used to determine pdf values
      * outside the grid.
      */
-    double ar39_pdf(int channel, double energy_kev, double fccd_mm, double dlf) {
+    double ar39_pdf(int channel, double energy_kev, double fccd_mm, double dlf, bool debug=false) {
+
+        if (debug) std::cout << "gerda::ar39_pdf(" << channel << ", " << energy_kev << ", "
+                             << fccd_mm << ", " <<  dlf << ") = " << std::flush;
+
+        if (energy_kev < energy_kev_fmt.min or energy_kev > energy_kev_fmt.max) {
+            throw std::domain_error("energy value out of allowed range");
+        }
+
+        if (fccd_mm < fccd_mm_fmt.min or fccd_mm > fccd_mm_fmt.max) {
+            throw std::domain_error("FCCD value out of allowed range");
+        }
+
+        if (dlf < dlf_fmt.min or dlf > dlf_fmt.max) {
+            throw std::domain_error("DLF value out of allowed range");
+        }
 
         // load lookup table, if not done yet
         if (lookup_table_map.find(channel) == lookup_table_map.end()) {
@@ -129,6 +150,8 @@ namespace gerda {
 
         auto c_0 = c_00*(1-f_d)+c_10*f_d;
         auto c_1 = c_01*(1-f_d)+c_11*f_d;
+
+        if (debug) std::cout << c_0*(1-d_d)+c_1*d_d << std::endl;
 
         return c_0*(1-d_d)+c_1*d_d;
     }

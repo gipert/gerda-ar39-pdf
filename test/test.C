@@ -72,7 +72,7 @@ void fccd_sweep(double dlf=0.2) {
             histos.push_back(h);
         }
         // out grid
-        for (double fccd = 0.625; fccd <= 2.4; fccd += 0.05) {
+        for (double fccd = 0.675; fccd <= 2.4; fccd += 0.05) {
 
             auto h = new TH1D(Form("%s, fccd = %.2f mm, dlf = %.2f", det_names[ch].c_str(), fccd, dlf),
                     Form("%s, fccd = 0.65:0.025:2.4 mm, dlf = %.2f", det_names[ch].c_str(), dlf), 200, 0, 200);
@@ -201,13 +201,15 @@ void test() {
     for (int i = 0; i < 9; ++i) new TColor(freec+i, (0+i*f)/255., (51+i*f)/255., (102+i*f)/255., "blue");
 
     gROOT->SetBatch();
+
     fccd_sweep(0.2);
     fccd_sweep(0.5);
     fccd_sweep(0.8);
+
     dlf_sweep(0.7);
     dlf_sweep(1.);
     dlf_sweep(1.5);
-    dlf_sweep(2.5);
+    dlf_sweep(2.4);
 
     fccd_sweep_fine(0.5);
 }
