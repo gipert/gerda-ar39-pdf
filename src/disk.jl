@@ -35,6 +35,7 @@ function get_ar39_histogram(channel::Int, fccd_mm::Float64, dlf::Float64)
     fccd_str = Int(fccd_mm*1e3)
     dlf_str = lpad(string(Int(dlf*1e2)), 3, '0')
     h = read_root_histogram("histos/nplus-fccd$(fccd_str)um-dlf$(dlf_str)/lar/sur_array_1/Ar39/pdf-lar-sur_array_1-Ar39.root", "raw/M1_ch$channel")
+    h = reshape(h, energy_lower_thr_keV:step(h.edges[1]):last(h.edges[1]))
     h.weights ./= n_ar39_primaries
     normalize!(h, mode=:density)
     return h

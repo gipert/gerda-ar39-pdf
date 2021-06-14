@@ -7,13 +7,8 @@ using BayesianBlocks
 using UpROOT
 using DelimitedFiles
 using ProgressMeter
-using EmpiricalDistributions
-using BAT
-using LsqFit
-using Distributions
-using IntervalSets
-using ValueShapes
 using Printf
+using Plots
 
 import KernelDensity: kde
 import Interpolations: interpolate
@@ -52,4 +47,20 @@ function run_pipeline()
     @showprogress for ch in [0:5; 7; 9:35; 37:40]
         serialize(ch, estimate_ar39_pdf(ch))
     end
+end
+
+function display_ar39_pdf(channel::Int, fccd_mm::Float64, dlf::Float64)
+
+    hist = get_ar39_histogram(channel, fccd_mm, dlf)
+    pdf = estimate_ar39_pdf(channel, fccd_mm, dlf)
+
+    plot(size=(700,400),
+         ylim=(0,Inf), xlim=(0,250),
+         title=@sprintf("Channel %i / FCCD = %.2f mm / DLF = %.2f", channel, fccd_mm, dlf),
+         xlabel="Energy (keV)",
+         ylabel="Counts / decay / keV")
+
+    plot!(hist, st=:step, label="0.1 keV MC hist")
+    plot!(pdf.itp.ranges[1], [pdf(e) for e in pdf.itp.ranges[1]], st=:scatter, color=:red, label="Interpolation nodes")
+    plot!(0:0.1:565, [pdf(e) for e in 0:0.1:565], linewidth=2, color=:red, label="Cubic spline")
 end
