@@ -13,7 +13,7 @@ using Plots
 import KernelDensity: kde
 import Interpolations: interpolate
 
-n_ar39_primaries = 299999999998
+n_ar39_primaries = 1000000000000
 
 energy_lower_thr_keV = 30
 
@@ -26,7 +26,7 @@ include("nonparametric.jl")
 # include("parametric.jl")
 
 "Default Ar39 pdf estimation method"
-estimate_ar39_pdf(h::Histogram{<:Real,1}) = interpolate(h, binsize=optimal_ar39_bw(h))
+estimate_ar39_pdf(h::Histogram{<:Real,1}) = interpolate(h, binsize=10)
 
 """
     estimate_ar39_pdf(channel, fccd_mm, dlf)
