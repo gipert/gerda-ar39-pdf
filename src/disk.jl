@@ -59,3 +59,16 @@ function serialize(channel::Int, container#=::Matrix{Function}=#)
     end
 end
 
+ls_ar39_mc() = ls_ar39_mc.(fccd_mm_grid', dlf_grid)
+
+function ls_ar39_mc(fccd_mm::Float64, dlf::Float64)
+
+    fccd_str = Int(fccd_mm*1e3)
+    dlf_str = lpad(string(Int(dlf*1e2)), 3, '0')
+    flag = isfile("histos/nplus-fccd$(fccd_str)um-dlf$(dlf_str)/lar/sur_array_4/Ar39/pdf-lar-sur_array_4-Ar39.root")
+    if !flag
+        @warn "Problems detected with histos/nplus-fccd$(fccd_str)um-dlf$(dlf_str)"
+    end
+
+    return flag
+end
