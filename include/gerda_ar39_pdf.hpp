@@ -19,7 +19,7 @@ namespace gerda {
     // Declare here the parameters of the 3D grid (must match what is written by
     // the compute.jl program)
     constexpr range_fmt energy_kev_fmt = {0., 0.1, 565.};
-    constexpr range_fmt fccd_mm_fmt = {0.65, 0.05, 2.4};
+    constexpr range_fmt fccd_mm_fmt = {0.65, 0.025, 2.4};
     constexpr range_fmt dlf_fmt = {0., 0.1, 1.};
     // plus the allowed channel values
     constexpr range_fmt channel_fmt = {0, 1, 41};

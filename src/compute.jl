@@ -18,7 +18,7 @@ n_ar39_primaries = 1000000000000
 energy_lower_thr_keV = 30
 
 energy_kev_grid = 0:0.1:565
-fccd_mm_grid = 0.65:0.05:2.4
+fccd_mm_grid = 0.65:0.025:2.4
 dlf_grid = 0:0.1:1
 
 include("disk.jl")
