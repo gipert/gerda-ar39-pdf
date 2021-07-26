@@ -33,7 +33,7 @@ scaled by number of Monte Carlo primaries.
 function get_ar39_histogram(channel::Int, fccd_mm::Float64, dlf::Float64)
     # convert numeric input to string
     fccd_str = Int(fccd_mm*1e3)
-    dlf_str = lpad(string(Int(dlf*1e2)), 3, '0')
+    dlf_str = lpad(string(Int(dlf*1e3)), 4, '0')
     h = read_root_histogram("histos/nplus-fccd$(fccd_str)um-dlf$(dlf_str)/lar/sur_array_4/Ar39/pdf-lar-sur_array_4-Ar39.root", "raw/M1_ch$channel")
     h = reshape(h, energy_lower_thr_keV:step(h.edges[1]):last(h.edges[1]))
     h.weights ./= n_ar39_primaries
@@ -63,8 +63,8 @@ ls_ar39_mc() = ls_ar39_mc.(fccd_mm_grid', dlf_grid)
 
 function ls_ar39_mc(fccd_mm::Float64, dlf::Float64)
 
-    fccd_str = Int(fccd_mm*1e3)
-    dlf_str = lpad(string(Int(dlf*1e2)), 3, '0')
+    fccd_str = round(Int, fccd_mm*1e3)
+    dlf_str = lpad(string(round(Int, dlf*1e3)), 4, '0')
     flag = isfile("histos/nplus-fccd$(fccd_str)um-dlf$(dlf_str)/lar/sur_array_4/Ar39/pdf-lar-sur_array_4-Ar39.root")
     if !flag
         @warn "Problems detected with histos/nplus-fccd$(fccd_str)um-dlf$(dlf_str)"

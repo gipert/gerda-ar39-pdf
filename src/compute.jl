@@ -18,12 +18,11 @@ n_ar39_primaries = 1000000000000
 energy_lower_thr_keV = 30
 
 energy_kev_grid = 0:0.1:565
-fccd_mm_grid = 0.65:0.05:2.4
-dlf_grid = 0:0.1:1
+fccd_mm_grid = 0.65:0.025:2.4
+dlf_grid = 0.4:0.01:0.8
 
 include("disk.jl")
 include("nonparametric.jl")
-# include("parametric.jl")
 
 "Default Ar39 pdf estimation method"
 estimate_ar39_pdf(h::Histogram{<:Real,1}) = interpolate(h, binsize=10)
